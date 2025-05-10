@@ -23,6 +23,7 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import CheckIcon from '@mui/icons-material/Check';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
 
 const pages = [
   { name: 'Home', path: '/' },
@@ -43,6 +44,7 @@ function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElTheme, setAnchorElTheme] = useState(null);
   const { mode, toggleTheme, colorTheme, changeColorTheme, availableThemes } = useTheme();
+  const { isAuthenticated, logout } = useAuth();
   const theme = useMuiTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -147,6 +149,28 @@ function Navbar() {
                   <Typography textAlign="center">{page.name}</Typography>
                 </MenuItem>
               ))}
+              {!isAuthenticated ? (
+                <>
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component={RouterLink}
+                    to="/login"
+                  >
+                    <Typography textAlign="center">Login</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={handleCloseNavMenu}
+                    component={RouterLink}
+                    to="/register"
+                  >
+                    <Typography textAlign="center">Register</Typography>
+                  </MenuItem>
+                </>
+              ) : (
+                <MenuItem onClick={() => { handleCloseNavMenu(); logout(); }}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
 
@@ -189,6 +213,48 @@ function Navbar() {
                 {page.name}
               </Button>
             ))}
+            {!isAuthenticated ? (
+              <>
+                <Button
+                  component={RouterLink}
+                  to="/login"
+                  sx={{
+                    mx: 1,
+                    color: mode === 'dark' ? 'white' : 'primary.main',
+                    '&:hover': {
+                      backgroundColor: mode === 'dark'
+                        ? 'rgba(255, 255, 255, 0.1)'
+                        : 'rgba(0, 0, 0, 0.1)',
+                    },
+                  }}
+                >
+                  Login
+                </Button>
+                <Button
+                  component={RouterLink}
+                  to="/register"
+                  variant="contained"
+                  sx={{ mx: 1 }}
+                >
+                  Register
+                </Button>
+              </>
+            ) : (
+              <Button
+                onClick={logout}
+                sx={{
+                  mx: 1,
+                  color: mode === 'dark' ? 'white' : 'primary.main',
+                  '&:hover': {
+                    backgroundColor: mode === 'dark'
+                      ? 'rgba(255, 255, 255, 0.1)'
+                      : 'rgba(0, 0, 0, 0.1)',
+                  },
+                }}
+              >
+                Logout
+              </Button>
+            )}
           </Box>
 
           {/* Theme Controls */}
