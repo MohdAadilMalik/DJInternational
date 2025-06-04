@@ -7,5 +7,5 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
-  base: '/DJInternational/', // Replace with your repository name
+ base: '/MohdAadilMalik.github.io/DJInternational/', // Replace with your repository name
 });
